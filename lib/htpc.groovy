@@ -27,8 +27,7 @@ def showNotification(host, port, title, message, image) {
  */
 def refreshPlexLibrary(Map m = [:]) {
 	tryLogCatch {
-		def defaultMap = ["server": "localhost", "port": 32400]
-		m = defaultMap << m
+		m = ["server": "localhost", "port": 32400] << m
 		def (server, port, library) = [m["server"], m["port"], m["library"]]
 		new XmlSlurper().parse("http://$server:$port/library/sections").Directory.each { dir ->
 			if ("${dir.@type}" == library) {

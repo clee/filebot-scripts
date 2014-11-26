@@ -424,19 +424,21 @@ if (getRenameLog().size() > 0) {
 		plex.each{ host ->
 			log.info "Notify Plex: $host"
 			tryLogCatch {
+				def libraries = [] as Set
 				groups.each { group, files ->
 					if (group.tvs || group.anime) {
-						log.info "Telling Plex to refresh TV shows"
-						refreshPlexLibrary(server:host, library:"show")
+						libraries << "show"
 					}
 					if (group.mov) {
-						log.info "Telling Plex to refresh movies"
-						refreshPlexLibrary(server:host, library:"movie")
+						libraries << "movie"
 					}
 					if (group.music) {
-						log.info "Telling Plex to refresh music"
-						refreshPlexLibrary(server:host, library:"artist")
+						libraries << "artist"
 					}
+				}
+				libraries.each { library ->
+						log.info "Telling Plex to refresh ${library}s"
+						refreshPlexLibrary(server:host, library:library)
 				}
 			}
 		}
